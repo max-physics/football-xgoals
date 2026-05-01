@@ -4,11 +4,16 @@ print(sys.executable)
 import json
 from pathlib import Path
 
-BASE = Path("open-data/data/")
 
 
-with open(BASE / "competitions.json") as f:
-    competitions = json.load(f)
+
+def load_competitions():
+    BASE = Path("open-data/data/")
+    with open(BASE / "competitions.json") as f:
+        competitions = json.load(f)
+    return competitions
+
+
 
 bundesliga = [
     c for c in competitions
@@ -111,7 +116,64 @@ def plot_passes(pass_start, pass_end):
     ax.set_aspect('equal')
 
     plt.show()
-    return
+    return fig
 
-plot_passes(pass_start, pass_end)
+#plot_passes(pass_start, pass_end)
+shots_timestamp = [
+    event.get('index', {})
+    for event in events
+    if event.get('type', {}).get('name') == 'Shot'
+]
 
+print(shots_timestamp)
+
+print(events[435])
+
+def shot_locations(events):
+    start_locations = []
+    end_locations = []
+
+    for event in events:
+        event_type = event.get('type', {}).get('name')
+        
+        if event_type == 'Shot':
+            start_locations.append(event.get('location'))
+            end_locations.append(event.get('shot', {}).get('end_location'))
+
+    return start_locations, end_locations
+
+shot_start, shot_end = shot_locations(events)
+
+def plot_shots(shot_start, shot_end):
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    pitch = patches.Rectangle((0, 0), 120, 80,
+                                edgecolor='black',
+                                facecolor='green',
+                                linewidth=2)
+    ax.add_patch(pitch)
+    #for i in range(len(pass_start)):
+     #   ax.plot([pass_start[i][0], pass_end[i][0]],[pass_start[i][1], pass_end[i][1]])
+
+    for start, end in zip(shot_start, shot_end):
+        ax.plot([start[0], end[0]], [start[1], end[1]])
+    
+    ax.set_xlim(0, 120)
+    ax.set_ylim(0, 80)
+    ax.set_aspect('equal')
+
+    plt.show()
+    return fig
+
+#plot_shots(shot_start, shot_end)
+
+print(competitions[0])
+
+def competition_year(competitions):
+    name_year = []
+    for competition in competitions:
+        name_year.append(competition.get('competition_name')+competition.get('season_name'))
+    
+    return name_year
+            
+print(competition_year(competitions))
