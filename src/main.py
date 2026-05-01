@@ -13,6 +13,9 @@ def load_competitions():
         competitions = json.load(f)
     return competitions
 
+BASE = Path("open-data/data/")
+with open(BASE / "competitions.json") as f:
+    competitions = json.load(f)
 
 
 bundesliga = [
