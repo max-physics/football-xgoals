@@ -92,21 +92,26 @@ print(pass_start[0][0])
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-fig, ax = plt.subplots(figsize=(10, 7))
+def plot_passes(pass_start, pass_end):
+    fig, ax = plt.subplots(figsize=(10, 7))
 
-pitch = patches.Rectangle((0, 0), 120, 80,
-                            edgecolor='black',
-                            facecolor='green',
-                            linewidth=2)
+    pitch = patches.Rectangle((0, 0), 120, 80,
+                                edgecolor='black',
+                                facecolor='green',
+                                linewidth=2)
+    ax.add_patch(pitch)
+    #for i in range(len(pass_start)):
+     #   ax.plot([pass_start[i][0], pass_end[i][0]],[pass_start[i][1], pass_end[i][1]])
 
-for i in range(len(pass_start)):
-    ax.plot([pass_start[i][0], pass_end[i][0]],[pass_start[i][1], pass_end[i][1]])
+    for start, end in zip(pass_start, pass_end):
+        ax.plot([start[0], end[0]], [start[1], end[1]])
+    
+    ax.set_xlim(0, 120)
+    ax.set_ylim(0, 80)
+    ax.set_aspect('equal')
 
-ax.add_patch(pitch)
+    plt.show()
+    return
 
-#ax.set_xlim(0, 120)
-#ax.set_ylim(0, 80)
-ax.set_aspect('equal')
-
-plt.show()
+plot_passes(pass_start, pass_end)
 
