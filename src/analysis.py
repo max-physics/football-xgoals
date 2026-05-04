@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 def load_competitions():
     BASE = Path("open-data/data/")
@@ -74,3 +76,10 @@ def plot_shots(shot_start, shot_end):
 
     plt.show()
     return fig
+
+def shot_distance(shot_start):
+    x_middle_goal = 120
+    y_middle_goal = 40
+    distance = ((shot_start[0]-x_middle_goal)**2+(shot_start[1]-y_middle_goal)**2)**0.5
+    return distance
+

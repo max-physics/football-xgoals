@@ -182,3 +182,6 @@ def competition_year(competitions):
 print(competition_year(competitions))
 
 print(len(matches))
+
+print(events[435])
+

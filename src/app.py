@@ -2,6 +2,7 @@ import streamlit as st
 from analysis import load_competitions
 import json
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 
 st.title("FOOTBALL STATISTICS")
@@ -59,4 +60,20 @@ if selected_match:
     st.write(match_names[selected_match])
 
 
+def load_events(match_id):
+    with open(BASE / "events" / f"{match_id}.json") as f:
+        events = json.load(f)
+    return events
+
+from analysis import pass_locations, plot_passes, shot_locations, plot_shots
+
+events = load_events(match_names[selected_match])
+
+fig = plot_passes(pass_locations(events)[0], pass_locations(events)[1])
+
+st.pyplot(fig)
+
+fig = plot_shots(shot_locations(events)[0], shot_locations(events)[1])
+
+st.pyplot(fig)
 
