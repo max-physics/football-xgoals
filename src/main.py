@@ -180,3 +180,5 @@ def competition_year(competitions):
     return name_year
             
 print(competition_year(competitions))
+
+print(len(matches))

@@ -1,8 +1,12 @@
 import streamlit as st
 from analysis import load_competitions
+import json
+from pathlib import Path
 
 
 st.title("FOOTBALL STATISTICS")
+
+BASE = Path("open-data/data/")
 
 competitions = load_competitions()
 
@@ -21,4 +25,38 @@ selected_comp = st.selectbox(
 )
 
 st.write(f"Chosen competition: {selected_comp}")
+
+def matches(selected_comp):
+    year = selected_comp[-9:]
+    name = selected_comp[:-9]
+    for competition in competitions:
+        if year == competition.get('season_name') and name == competition.get('competition_name'):
+            s_id = competition.get('season_id')
+            with open(BASE / "matches" / str(competition.get('competition_id')) / f'{s_id}.json') as f:
+                matches = json.load(f)
+            
+            
+    return matches
+
+
+
+def print_matches(selected_comp):
+    match_data = matches(selected_comp)
+    match_dict = {
+        f'{m['home_team']['home_team_name']} vs. {m['away_team']['away_team_name']}':m['match_id']
+        for m in match_data
+    }
+    return match_dict
+
+if selected_comp:
+    match_names = print_matches(selected_comp)
+    selected_match = st.selectbox(
+    "Available matches",
+    list(match_names.keys())
+    )
+
+if selected_match:
+    st.write(match_names[selected_match])
+
+
 
